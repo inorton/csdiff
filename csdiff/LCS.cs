@@ -5,9 +5,14 @@ using System.Collections;
 
 namespace csdiff
 {
+	/// <summary>
+	/// Tool to compute and extract the Longest Common Substring of two 
+	/// sequences by dynamic programming. This method uses quadratic time 
+	/// and space and attempts to reduce the problem set.
+	/// </summary>
 	public class LCS<T> {
 		
-		public int[,] lengths;
+		protected int[,] lengths;
 		protected int start_a = -1;
 		protected int start_b = -1;
 		protected int end_a   = -1;
@@ -19,6 +24,9 @@ namespace csdiff
 		private int lcs_len = -1;
 		private List<T> lcs_seq = null;
 		
+		//// <value>
+		/// Length of Longest Common Subsequence
+		/// </value>
 		public int Length
 		{
 			get {
@@ -29,6 +37,9 @@ namespace csdiff
 			}
 		}
 		
+		//// <value>
+		/// Longest Common Subsequence
+		/// </value>
 		public List<T> Sequence
 		{
 			get {
@@ -39,12 +50,27 @@ namespace csdiff
 			}
 		}
 		
+		/// <summary>
+		/// Calculate the Longest Common Subsequence between seq_a and seq_b
+		/// </summary>
+		/// <param name="seq_a">
+		/// A <see cref="T"/>
+		/// </param>
+		/// <param name="seq_b">
+		/// A <see cref="T"/>
+		/// </param>
 		public LCS ( T[] seq_a, T[] seq_b )
 		{
 			a = seq_a;
 			b = seq_b;
 		}
 		
+		/// <summary>
+		/// Compute the LCS for the supplied sequences
+		/// </summary>
+		/// <returns>
+		/// A <see cref="List"/>
+		/// </returns>
 		private List<T> ComputeSequence()
 		{
 			List<T> seq = new List<T>(this.Length);

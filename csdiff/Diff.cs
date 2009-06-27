@@ -4,13 +4,20 @@ using System.Collections.Generic;
 
 namespace csdiff
 {
+	/// <summary>
+	/// differences between elements
+	/// </summary>
 	public enum ChangeMaker 
 	{
 		NONE,
 		ADD,
 		REMOVE,
+		CHANGE,
 	}
 
+	/// <summary>
+	/// A single change and expression of difference
+	/// </summary>
 	public struct Change<T> {
 		public int Index;
 		public ChangeMaker Mark;
@@ -18,10 +25,25 @@ namespace csdiff
 	}
 	
 	
+	/// <summary>
+	/// Tool to compute the difference between two sequences.
+	/// </summary>
 	public class Diff<T> : LCS<T>
 	{
 		List<Change<T>> changes;
 	
+		/// <summary>
+		/// Comparison function to sort a list of changes
+		/// </summary>
+		/// <param name="a">
+		/// A <see cref="Change"/>
+		/// </param>
+		/// <param name="b">
+		/// A <see cref="Change"/>
+		/// </param>
+		/// <returns>
+		/// A <see cref="System.Int32"/>
+		/// </returns>
 		private static int SortChange( Change<T> a, Change<T> b )
 		{
 			if ( a.Index > b.Index )
@@ -33,10 +55,25 @@ namespace csdiff
 			return -1;
 		}
 	
+		/// <summary>
+		/// Calculate the diff between two sequences seq_a and seq_b
+		/// </summary>
+		/// <param name="seq_a">
+		/// A <see cref="T"/>
+		/// </param>
+		/// <param name="seq_b">
+		/// A <see cref="T"/>
+		/// </param>
 		public Diff ( T[] seq_a, T[] seq_b ) : base ( seq_a, seq_b )
 		{		
 		}
 	
+		/// <summary>
+		/// Output the simple string representation of this diff if possible.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="System.String"/>
+		/// </returns>
 		public string ToString()
 		{
 			string ret = null;
@@ -54,6 +91,9 @@ namespace csdiff
 			return ret;
 		}
 		
+		//// <value>
+		/// The changes betweem the two sequences
+		/// </value>
 		public List<Change<T>> Changes
 		{
 			get {
