@@ -27,7 +27,7 @@ public namespace myprog {
       MyType[] group1 = ...
       MyType[] group2 = ...
 
-      Diff d = new Diff( group1, group2 );
+      Diff d = new Diff<MyType>( group1, group2 );
 
       // Get the LCS
       List<MyType> lcs = d.Sequence;
@@ -38,7 +38,7 @@ public namespace myprog {
       // or for types with a meaningful ToString() method you can do this.
       string[] ax = "the quick brown fox ate fish".Split(" ");
       string[] bx = "the quick blue fox ate cheese".Split(" ");
-      Diff mydiff = new Diff( ax, bx );
+      Diff mydiff = new Diff<string>( ax, bx );
       Console.WriteLine( mydiff.ToString() );
       // should print:-
       //
