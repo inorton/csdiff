@@ -19,7 +19,7 @@ namespace csdiff
 			
 			LCS<int> l = new LCS<int>( ax, bx );
 			
-			Console.WriteLine( "LCS {0} ", l.Length );
+			Console.WriteLine( "LCS Length {0} ", l.Length );
 		}
 		
 		[Test()]
@@ -32,7 +32,7 @@ namespace csdiff
 			
 			LCS<string> l = new LCS<string>( ax, bx );
 			
-			Console.WriteLine( "LCS {0}" , l.Length );
+			Console.WriteLine( "LCS Length {0}" , l.Length );
 		}
 
 		

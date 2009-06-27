@@ -1,5 +1,6 @@
 
 using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 
 namespace csdiff
@@ -17,9 +18,34 @@ namespace csdiff
 			int[] ax = new int[]{ 2,2,3,1,2,3,4,5,6,7,8,9,0,6,6 };
 			int[] bx = new int[]{ 2,1,3,3,4,5,6,7,9,1,1,2,3,5,6,6 };
 			
-			LCS<int> l = new Diff<int>( ax, bx );
+			Diff<int> l = new Diff<int>( ax, bx );
+			Console.Out.Write("LCS ");
+			foreach ( int x in l.Sequence ){
+				Console.Out.Write( x.ToString() + " " );
+			}
+			Console.Out.Write("\n");
+			Console.WriteLine("Changes");
+			Console.WriteLine( l.ToString() );
 			
-			Console.WriteLine( "LCS {0} ", l.Length );
+		}
+		
+		[Test()]
+		public void Chars()
+		{
+			Console.WriteLine("Diff Chars");
+			
+			char[] ax = "abcdef1234".ToCharArray();
+			char[] bx = "cdef1234aa".ToCharArray();
+			
+			Diff<char> l = new Diff<char>( ax, bx );
+		
+			Console.Write("LCS ");
+			foreach ( char c in l.Sequence ){
+				Console.Write( c );
+			}
+			Console.Write("\n");
+			Console.WriteLine("Changes");
+			Console.WriteLine( l.ToString() );
 			
 		}
 		
@@ -31,10 +57,10 @@ namespace csdiff
 			string[] ax = "foo bar Baz Bob Cob Flob Zob flob flob wobble cobble Flob Flob wobble floo boo moo zoo boo goo zoo too".Split(' ');
 			string[] bx = "zoo car Baz fob Cob Flob xob xlob flob wobble wobble Flob Flob xoo zoo too".Split(' ');
 			
-			LCS<string> l = new Diff<string>( ax, bx );
-			
-			Console.WriteLine( "LCS {0}" , l.Length );
-			Console.WriteLine( "SEQ {0} ", String.Join(" ", l.Sequence.ToArray() ) );
+			Diff<string> l = new Diff<string>( ax, bx );
+			Console.WriteLine( "LCS {0} ", String.Join(" ", l.Sequence.ToArray() ) );
+			Console.WriteLine("Changes");
+			Console.WriteLine( l.ToString() );
 		}
 
 	}

@@ -8,13 +8,13 @@ namespace csdiff
 	public class LCS<T> {
 		
 		public int[,] lengths;
-		private int start_a = -1;
-		private int start_b = -1;
-		private int end_a   = -1;
-		private int end_b   = -1;
+		protected int start_a = -1;
+		protected int start_b = -1;
+		protected int end_a   = -1;
+		protected int end_b   = -1;
 		
-		private T[] a;
-		private T[] b;
+		protected T[] a;
+		protected T[] b;
 		
 		private int lcs_len = -1;
 		private List<T> lcs_seq = null;
