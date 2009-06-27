@@ -1,0 +1,54 @@
+csdiff (c) 2009 Ian Norton
+
+About
+------
+
+csdiff contains two simple classes, LCS and Diff, the former uses dynamic programming to 
+deduce the longest common substring from two sequences of the same generic type. The latter
+uses the LCS class to construct a diff style description between the two sequences.
+
+The LCS implementation is as described here: http://www.ics.uci.edu/~eppstein/161/960229.html
+and has characteristic quadratic time and space limitations but with some optimization to 
+reduce the problem set.
+
+Usage
+------
+
+using csdiff;
+
+public namespace myprog {
+  public class myprog {
+
+    public static void Main( string[] argv )
+    {
+      MyType[] group1 = ...
+      MyType[] group2 = ...
+
+      Diff d = new Diff( group1, group2 );
+
+      // Get the LCS
+      List<MyType> lcs = d.Sequence;
+
+      // Get the Diff
+      List<csdiff.Change<MyType>> diff = d.Changes;
+
+      // or for types with a meaningful ToString() method you can do this.
+      string[] ax = "the quick brown fox ate fish".Split(" ");
+      string[] bx = "the quick blue fox ate cheese".Split(" ");
+      Diff mydiff = new Diff( ax, bx );
+      Console.WriteLine( mydiff.ToString() );
+      // should print:-
+      //
+      //  2 - brown
+      //  2 + blue
+      //  5 - fish
+      //  5 + cheese
+    }
+  }
+}
+
+
+License
+--------
+
+This is released under a BSD compatible license ( see LICENSE )
