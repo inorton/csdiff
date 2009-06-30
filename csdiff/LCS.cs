@@ -78,18 +78,30 @@ namespace csdiff
 			int i = 0;
 			int j = 0;
 			
-			while (( i < ( end_a - start_a ) ) && ( j < ( end_b - start_b ) ) ){
+			while ( i < start_a )
+				seq.Add( a[i++] );
+			i = 0;
+			
+			while ( j < ( end_b - start_b ) ){
+				if ( i >= ( end_a - start_a ) )
+					break;
 				if ( a[start_a + i].Equals( b[start_b + j] ) ){
 					seq.Add( a[start_a + i] ); // elements match, part of lcs
-					i++; j++;
+					i++; 
+					j++;
 				} else {
 					if ( lengths[i+1,j] < lengths[i,j] ) { // go up
-						j++; 
+						j++;  // thing inserted
 					} else {
-						i++;
+						i++;  // thing deleted
 					}
 				}
-			} 
+			}
+			
+			i = end_a;
+			while ( i < a.Length )
+				seq.Add( a[i++] );
+			
 			
 			
 			return seq;
