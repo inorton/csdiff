@@ -27,12 +27,34 @@ namespace csdiff
 		}
 		
 		protected Cell[,] lengths;
+		
+		/// <summary>
+		/// Where the first char in sequence a differs from b
+		/// </summary>
 		protected int start_a = -1;
+		/// <summary>
+		/// Where the frirst char in sequence b differs from a
+		/// </summary>
 		protected int start_b = -1;
+		
+		/// <summary>
+		/// Where from this index onwards a is the same as b
+		/// </summary>
 		protected int end_a   = -1;
+		
+		/// <summary>
+		/// Where from this index onwards a is the same as b
+		/// </summary>
 		protected int end_b   = -1;
 		
+		/// <summary>
+		/// sequence a
+		/// </summary>
 		protected T[] a;
+		
+		/// <summary>
+		/// sequence b
+		/// </summary>
 		protected T[] b;
 		
 		private int lcs_len = -1;

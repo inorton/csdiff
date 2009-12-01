@@ -105,44 +105,78 @@ namespace csdiff
 	
 		private List<Change<T>> ComputeChanges()
 		{
-			int j = 0;
-			
+			int i = start_a;
+			int j = start_b;
+			int c = 0;
+			int n = start_a; // index of new change
+									
 			List<Change<T>> chg = new List<Change<T>>();
-			Console.Write("  ");
-			foreach ( T x in a ){
-				Console.Write(" {0} ",x );
+			
+			while ( (i < end_a) && (j < end_b) ){
+				if ( Sequence[c].Equals( a[i] ) ){ // A matches LCS
+					if ( Sequence[c].Equals( b[j] ) ){ // A B C are same
+						// move all
+						c++; i++; j++; n++;
+					} else {
+						// B not in LCS
+						Change<T> ch = new Change<T>();
+						ch.Mark = ChangeMaker.ADD;
+						ch.changed = b[j++];
+						ch.Index = n++;
+						chg.Add( ch );
+					}
+				} else { // A is not in LCS
+					if ( Sequence[c].Equals( b[j] )) { // but B matches LCS
+						// remove A
+						Change<T> ch = new Change<T>();
+						ch.Mark = ChangeMaker.REMOVE;;
+						ch.changed = a[i];
+						ch.Index = n;
+						chg.Add( ch );
+						i++;
+					} else {
+						// A, B, C all differ,
+						Change<T> ch = new Change<T>();
+						ch.Mark = ChangeMaker.REMOVE;
+						ch.changed = a[i];
+						ch.Index = n;
+						chg.Add( ch );
+						
+						ch = new Change<T>();
+						ch.Mark = ChangeMaker.ADD;
+						ch.Index = n;
+						ch.changed = b[j];
+						chg.Add( ch );
+						i++; j++; n++;
+					}
+				}
 			}
+			
+			
+			while ( i < ( a.Length - 1 ) ){
+				// remove remaining a
+				Change<T> ch = new Change<T>();
+				ch.Mark = ChangeMaker.REMOVE;
+				ch.changed = a[i++];
+				ch.Index = n;
+				chg.Add( ch );
+			}
+			
+			
+			
+			while ( j < ( b.Length - 1 ) ){
+				// add remaining b
+				Change<T> ch = new Change<T>();
+				ch.Mark = ChangeMaker.ADD;
+				ch.changed = b[++j];
+				ch.Index = n++;
+				chg.Add ( ch );
+			}
+			
+			
 			Console.Write("\n");
 			
-			while ( j <= ( end_b - start_b ) ){
-				Console.Write("{0}  ", b[j+start_b]);
-				int i = 0;
-				while ( i <= ( end_a - start_a ) ){
-				  string mv = "0";
-				  switch( lengths[i,j].Move ){
-					case Move.NORTH: // insertion
-					mv = "^";
-					break;
-					
-					case Move.WEST: // deletion
-					mv = "<";
-					break;
-					
-					case Move.NORTHWEST:
-					mv = "`";
-					break;
-					
-					default:
-					mv = "?";
-					break;
-				  }
-				  mv = String.Format("{0}{1} ",mv,lengths[i,j].Length);
-				  Console.Write(mv);
-				  i++;
-				}
-				Console.Write("\n");
-				j++;
-			}
+			
 			
 			chg.Sort( SortChange );
 			return chg;

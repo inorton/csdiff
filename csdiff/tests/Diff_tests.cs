@@ -15,8 +15,8 @@ namespace csdiff
 		{
 			Console.WriteLine("Diff Integers");
 			
-			int[] ax = new int[]{ 2,2,3,1,2,3,4,5,6,7,8,9,0,6,6 };
-			int[] bx = new int[]{ 2,1,3,3,4,5,6,7,9,1,1,2,3,5,6,6 };
+			int[] ax = new int[]{ 3,3,3,3,3,3 };
+			int[] bx = new int[]{ 2,3,3,1,2 };
 			
 			Diff<int> l = new Diff<int>( ax, bx );
 			Console.Out.Write("LCS ");

@@ -27,12 +27,17 @@ namespace csdiff
 		{
 			Console.WriteLine("Test Strings");
 			
-			string[] ax = "foo bar Baz Bob Cob Flob Zob flob flob wobble cobble Flob Flob wobble floo boo moo zoo boo goo zoo too".Split(' ');
-			string[] bx = "zoo car Baz fob Cob Flob xob xlob flob wobble wobble Flob Flob xoo zoo too".Split(' ');
+			string[] ax = "h u m a n".Split(' ');
+			string[] bx = "c h i m p a n z e e".Split(' ');
 			
 			LCS<string> l = new LCS<string>( ax, bx );
 			
 			Console.WriteLine( "LCS Length {0}" , l.Length );
+			
+			string seq = String.Join("", l.Sequence.ToArray() );
+			
+			if ( !seq.Equals("hman") )
+				throw new Exception("lcs failed!");
 		}
 
 		
