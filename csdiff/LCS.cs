@@ -5,6 +5,7 @@ using System.Collections;
 
 namespace csdiff
 {
+
 	/// <summary>
 	/// Tool to compute and extract the Longest Common Substring of two 
 	/// sequences by dynamic programming. This method uses quadratic time 
@@ -12,7 +13,20 @@ namespace csdiff
 	/// </summary>
 	public class LCS<T> {
 		
-		protected int[,] lengths;
+		public enum Move : byte {
+			NONE,
+			NORTH,
+			WEST,
+			NORTHWEST,
+			
+		}
+		
+		public struct Cell {
+			public int Length;
+			public Move  Move;
+		}
+		
+		protected Cell[,] lengths;
 		protected int start_a = -1;
 		protected int start_b = -1;
 		protected int end_a   = -1;
@@ -75,35 +89,28 @@ namespace csdiff
 		{
 			List<T> seq = new List<T>(this.Length);
 			
-			int i = 0;
-			int j = 0;
+			int i = end_a;
+			int j = end_b;
 			
-			while ( i < start_a )
-				seq.Add( a[i++] );
-			i = 0;
+			while ( ( j >= start_b ) && ( i >= start_a ) ){
+				if ( lengths[i,j].Move == Move.NONE )
+				{
+					j--;i--;
+				}
 			
-			while ( j < ( end_b - start_b ) ){
-				if ( i >= ( end_a - start_a ) )
-					break;
-				if ( a[start_a + i].Equals( b[start_b + j] ) ){
-					seq.Add( a[start_a + i] ); // elements match, part of lcs
-					i++; 
-					j++;
+				if ( lengths[i,j].Move == Move.NORTHWEST ){
+					seq.Add( a[i] );
+					i--; j--;
 				} else {
-					if ( lengths[i+1,j] < lengths[i,j] ) { // go up
-						j++;  // thing inserted
-					} else {
-						i++;  // thing deleted
+					if ( lengths[i,j].Move == Move.NORTH ){
+						j--;
+					}
+					if ( lengths[i,j].Move == Move.WEST ){
+						i--;
 					}
 				}
 			}
-			
-			i = end_a;
-			while ( i < a.Length )
-				seq.Add( a[i++] );
-			
-			
-			
+			seq.Reverse();
 			return seq;
 		}
 
@@ -111,35 +118,57 @@ namespace csdiff
 		{
 		
 			// reduce problem set ( ignore common start and end data )
-			start_a = 0;
-			start_b = 0;	
-			end_a   = a.Length - 1;
-			end_b   = b.Length - 1;
+			start_a = -1;
+			start_b = -1;	
+			end_a   = a.Length;
+			end_b   = b.Length;
 			
-			while ( ( a[start_a].Equals(b[start_b]) ) && ( start_a < end_a ) && ( start_b < end_b ) )
+			do {
 				start_a++; start_b++;
-	
-			while ( ( a[end_a].Equals(b[end_b]) ) && ( start_a < end_a ) && ( start_b < end_b ) )
+			}
+			while ( ( a[start_a].Equals(b[start_b]) ) && ( start_a < end_a ) && ( start_b < end_b ) );
+			
+			do {
 				end_a--; end_b--;
+			}
+			while ( ( a[end_a].Equals(b[end_b]) ) && ( start_a < end_a ) && ( start_b < end_b ) );
+			
 	
-			lengths = new int[ 1 + end_a - start_a , 1 + end_b - start_b ];
+			lengths = new Cell[ 2 + end_a - start_a , 2 + end_b - start_b ];
 			
 			// now actually find our longest common substring (length only)
 			
-			for ( int i = ( end_a - start_a -1 ) ; i >= 0; i-- ){	
-				for ( int j = ( end_b - start_b -1 ) ; j >= 0 ; j-- ){
-					if ( a[i + start_a].Equals( b[j + start_b ] ) ){
-						lengths[i,j] = 1 + lengths[i+1,j+1];
+			for ( int i = 0 ; i <= (end_a - start_a) ; i++ ){	
+				for ( int j = 0 ; j <= (end_b - start_b) ; j++ ){
+					int _len = 0;
+					if ( ( i > 0 ) && ( j > 0 ) )
+						_len = lengths[i-1,j-1].Length;
+					
+					if ( a[i+start_a].Equals( b[j + start_b] ) ){
+						lengths[i,j].Move = Move.NORTHWEST;
+						lengths[i,j].Length = _len+1;
 					} else {
-						int x = lengths[ i+1,j ];
-						if ( lengths[i,j+1] > x )
-							x = lengths[i,j+1];
-						lengths[i,j] = x;
+						int left = 0;
+						int above = 0;
+						if ( i > 0 )
+							left = lengths[i-1,j].Length;
+						if ( j > 0 )
+							above = lengths[i,j-1].Length;
+						
+						if ( left < above ){
+							lengths[i,j].Length = above;
+							lengths[i,j].Move = Move.NORTH;
+						} else {
+							lengths[i,j].Length = left;
+							lengths[i,j].Move = Move.WEST;
+						}
 					}
 				}
 			}
 			
-			return lengths[0,0];
+			Console.WriteLine("Grid Done");
+			
+			return lengths[0,0].Length;
 			
 		}
 			

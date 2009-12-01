@@ -65,7 +65,7 @@ namespace csdiff
 		/// A <see cref="T"/>
 		/// </param>
 		public Diff ( T[] seq_a, T[] seq_b ) : base ( seq_a, seq_b )
-		{		
+		{		 
 		}
 	
 		/// <summary>
@@ -74,7 +74,7 @@ namespace csdiff
 		/// <returns>
 		/// A <see cref="System.String"/>
 		/// </returns>
-		public string ToString()
+		public override string ToString()
 		{
 			string ret = null;
 			if ( this.Changes.Count > 0 )
@@ -105,44 +105,42 @@ namespace csdiff
 	
 		private List<Change<T>> ComputeChanges()
 		{
-			int i = start_a;
-			int j = start_b;
-			int s = 0;
+			int j = 0;
+			
 			List<Change<T>> chg = new List<Change<T>>();
-			T[] seq = this.Sequence.ToArray();
-			
-			while (i <= end_a ){
-				Change<T> c;
-				c.Index = i;
-				c.Mark = ChangeMaker.REMOVE;
-				c.changed = a[i];
-				if ( s < seq.Length ){
-					if ( seq[s].Equals( a[i] ) ){
-						s++;
-					} else {
-						chg.Add( c );		
-					}
-				} else {
-					chg.Add( c );
-				}
-				i++;
+			Console.Write("  ");
+			foreach ( T x in a ){
+				Console.Write(" {0} ",x );
 			}
+			Console.Write("\n");
 			
-			s = 0;
-			while (j <= end_b ){
-				Change<T> c;
-				c.Index = j;
-				c.Mark = ChangeMaker.ADD;
-				c.changed = b[j];
-				if ( s < seq.Length ){
-					if ( seq[s].Equals( b[j] ) ){
-						s++;
-					} else {
-						chg.Add( c );
-					}
-				} else {
-					chg.Add( c );
+			while ( j <= ( end_b - start_b ) ){
+				Console.Write("{0}  ", b[j+start_b]);
+				int i = 0;
+				while ( i <= ( end_a - start_a ) ){
+				  string mv = "0";
+				  switch( lengths[i,j].Move ){
+					case Move.NORTH: // insertion
+					mv = "^";
+					break;
+					
+					case Move.WEST: // deletion
+					mv = "<";
+					break;
+					
+					case Move.NORTHWEST:
+					mv = "`";
+					break;
+					
+					default:
+					mv = "?";
+					break;
+				  }
+				  mv = String.Format("{0}{1} ",mv,lengths[i,j].Length);
+				  Console.Write(mv);
+				  i++;
 				}
+				Console.Write("\n");
 				j++;
 			}
 			

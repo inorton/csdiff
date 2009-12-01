@@ -34,8 +34,8 @@ namespace csdiff
 		{
 			Console.WriteLine("Diff Chars");
 			
-			char[] ax = "abcdef1234".ToCharArray();
-			char[] bx = "cdef1234aa".ToCharArray();
+			char[] ax = "human".ToCharArray();
+			char[] bx = "chimpanzee".ToCharArray();
 			
 			Diff<char> l = new Diff<char>( ax, bx );
 		
@@ -54,8 +54,8 @@ namespace csdiff
 		{
 			Console.WriteLine("Diff Strings");
 			
-			string[] ax = "foo bar Baz Bob Cob Flob Zob flob flob wobble cobble Flob Flob wobble floo boo moo zoo boo goo zoo too".Split(' ');
-			string[] bx = "zoo car Baz fob Cob Flob xob xlob flob wobble wobble Flob Flob xoo zoo too".Split(' ');
+			string[] ax = "H U M A N".Split(' ');
+			string[] bx = "C H I M P A N Z E E".Split(' ');
 			
 			Diff<string> l = new Diff<string>( ax, bx );
 			Console.WriteLine( "LCS {0} ", String.Join(" ", l.Sequence.ToArray() ) );
